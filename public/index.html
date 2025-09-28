@@ -1,43 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Love</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+        body {
+            background: linear-gradient(135deg, #0c0b0b 0%, #614e71 50%, #1b1818 100%);
+            background-size: 400% 400%;
+            animation: backgroundShift 8s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+            overflow: hidden;
+            position: relative;
+        }
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+        .photo-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none;
+        }
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+        .photo-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(70%) brightness(1) contrast(2) saturate(20%);
+        }
+
+        .photo-background.active {
+            opacity: 0.4;
+        }
+
+        /* Ensure content appears above photos */
+        .sparkles,
+        .birthday-title,
+        .heart-container,
+        .love-message,
+        .click-message,
+        .floating-hearts {
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .heart-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 15;
+            margin-top: 80px;
+        }
+
+        .heart-container:hover {
+            transform: scale(1.08);
+        }
+
+        .heart {
+            width: 100px;
+            height: 90px;
+            position: relative;
+            animation: heartbeat 1.8s ease-in-out infinite;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: '';
+            width: 50px;
+            height: 80px;
+            position: absolute;
+            left: 50px;
+            top: 0;
+            background: linear-gradient(135deg, #c599a2 0%, #e91e63 50%, #aea7a7 100%);
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+            box-shadow: 
+                0 0 20px rgba(255, 23, 68, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            30% { transform: scale(1.05); }
+            60% { transform: scale(1.08); }
+        }
+
+        .heart {
+            width: 100px;
+            height: 90px;
+            position: relative;
+            animation: heartbeat 0.5s ease-in-out infinite;
+        }
+
+        .sparkles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, #5fc7d7, #ffc107, #d4abb8);
+            border-radius: 50%;
+            animation: sparkle 2s linear infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 80%; left: 20%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { top: 30%; left: 80%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { top: 70%; left: 75%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { top: 10%; left: 60%; animation-delay: 0.3s; }
+        .sparkle:nth-child(6) { top: 90%; left: 50%; animation-delay: 0.8s; }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .birthday-title {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            color: #fff;
+            font-size: 3.5em;
+            font-weight: bold;
+            text-align: center;
+            background: linear-gradient(45deg, #ff6b9d, #ff1744, #ffc107, #e91e63, #9c27b0);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite, glow 2s ease-in-out infinite, slideDown 1.2s ease-out forwards;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.9), 0 0 50px rgba(255, 23, 68, 0.6);
+            z-index: 15;
+            line-height: 1.1;
+            font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            opacity: 0;
+        }
+
+        @keyframes slideDown {
+            0% {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .love-message {
+            position: absolute;
+            bottom: 18%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 3em;
+            font-weight: bold;
+            text-align: center;
+            background: linear-gradient(45deg, #ff6b9d, #ff1744, #d50000, #e91e63);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite, pulse 2s ease-in-out infinite;
+            letter-spacing: 8px;
+            z-index: 15;
+            text-shadow: 0 0 35px rgba(255, 107, 157, 0.9), 0 0 60px rgba(255, 23, 68, 0.5);
+            font-family: 'Impact', 'Arial Black', sans-serif;
+        }
+
+        .click-message {
+            position: absolute;
+            top: 82%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            opacity: 0.9;
+            animation: fade 3s ease-in-out infinite;
+            z-index: 15;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 107, 157, 0.5); }
+            50% { text-shadow: 0 0 30px rgba(255, 107, 157, 0.8), 0 0 40px rgba(255, 23, 68, 0.4); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Coupon Page Styles */
+        .coupon-page {
+            display: none;
+            background: linear-gradient(135deg, #0c0b0b 0%, #614e71 50%, #1b1818 100%);
+            background-size: 400% 400%;
+            animation: backgroundShift 8s ease-in-out infinite;
+            min-height: 100vh;
+            padding: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .coupon-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            transform: scale(0);
+            animation: popIn 0.8s ease-out forwards;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0) rotate(180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .coupon-header {
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            background: linear-gradient(45deg, #ff6b9d, #ff1744, #ffc107, #e91e63);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+            font-family: 'Arial', sans-serif;
+            font-weight: 300;
+            line-height: 1.3;
+        }
+
+        .coupon-code {
+            background: linear-gradient(45deg, #ff1744, #e91e63, #d50000);
+            color: #fff;
+            padding: 25px 35px;
+            border-radius: 15px;
+            font-size: 2.2em;
+            font-weight: bold;
+            margin: 50px 0;
+            letter-spacing: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(255, 23, 68, 0.3);
+            font-family: 'Courier New', monospace;
+        }
+
+        .coupon-code:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 23, 68, 0.5);
+        }
+
+        .coupon-description {
+            font-size: 1.3em;
+            color: #fff;
+            line-height: 1.6;
+            margin: 40px 0;
+            opacity: 0.95;
+            font-family: 'Georgia', serif;
+            font-weight: 400;
+        }
+
+        .coupon-description strong {
+            color: #ff6b9d;
+            font-size: 1.4em;
+            background: linear-gradient(45deg, #ff6b9d, #ff1744);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .validity {
+            color: #ffc107;
+            font-weight: 500;
+            font-size: 1.1em;
+            margin-top: 30px;
+            opacity: 0.9;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .back-heart {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            width: 35px;
+            height: 32px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .back-heart:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .back-heart:before,
+        .back-heart:after {
+            content: '';
+            width: 17px;
+            height: 28px;
+            position: absolute;
+            left: 17px;
+            top: 0;
+            background: linear-gradient(135deg, #ff1744, #e91e63);
+            border-radius: 17px 17px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .back-heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Page -->
+    <div id="mainPage">
+        <!-- Photo Background Slideshow -->
+        <div class="photo-background" id="photo1">
+            <img src="photo1.jpg" alt="Memory 1">
+        </div>
+        <div class="photo-background" id="photo2">
+            <img src="photo2.jpg" alt="Memory 2">
+        </div>
+        <div class="photo-background" id="photo3">
+            <img src="photo3.jpg" alt="Memory 3">
+        </div>
+        <div class="photo-background" id="photo4">
+            <img src="photo4.jpg" alt="Memory 4">
+        </div>
+        <div class="photo-background" id="photo5">
+            <img src="photo5.jpg" alt="Memory 5">
+        </div>
+        
+        <div class="birthday-title">
+            Happiest Birthday<br> Motku! 💖
+        </div>
+
+        <div class="heart-container" onclick="showCoupon()">
+            <div class="heart"></div>
+        </div>
+        
+        <div class="love-message">
+            ILYSM
+        </div>
+        
+        <div class="click-message">
+            Touch my heart for a motku surprise! ✨
+        </div>
+
+        <div class="floating-hearts" id="floatingHearts"></div>
+    </div>
+
+    <!-- Coupon Page -->
+    <div id="couponPage" class="coupon-page">
+        <div class="back-heart" onclick="showMain()"></div>
+        
+        <div class="coupon-card">
+            <div class="coupon-header">
+                🎉 Happy Birthday! 🎉
+            </div>
+            
+            <div class="coupon-code" onclick="copyCode()" title="Click to copy!">
+                LOVE4EVER
+            </div>
+            
+            <div class="coupon-description">
+                Your <strong>FREE GOLGAPPA</strong><br>
+                service for life! 🥟<br><br>
+                
+                Served with love, always! 💕
+            </div>
+            
+            <div class="validity">
+                Valid Forever ✨
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Photo slideshow functionality
+        let currentPhoto = -1;
+        const photos = ['photo1', 'photo2', 'photo3', 'photo4', 'photo5'];
+        
+        function preloadImages() {
+            photos.forEach((photoId, index) => {
+                const img = document.querySelector(`#${photoId} img`);
+                if (img) {
+                    img.onload = function() {
+                        console.log(`Photo ${index + 1} loaded successfully`);
+                    };
+                    img.onerror = function() {
+                        console.log(`Photo ${index + 1} failed to load - check if ${this.src} exists`);
+                        // Hide this photo container if image fails to load
+                        document.getElementById(photoId).style.display = 'none';
+                    };
+                }
+            });
+        }
+        
+        function showNextPhoto() {
+            // Hide current photo
+            if (currentPhoto >= 0) {
+                const currentElement = document.getElementById(photos[currentPhoto]);
+                if (currentElement) {
+                    currentElement.classList.remove('active');
+                }
+            }
+            
+            // Wait 0.5 seconds before showing next photo (fade gap)
+            setTimeout(() => {
+                // Move to next photo
+                currentPhoto = (currentPhoto + 1) % photos.length;
+                
+                // Show next photo
+                const nextElement = document.getElementById(photos[currentPhoto]);
+                if (nextElement && nextElement.style.display !== 'none') {
+                    nextElement.classList.add('active');
+                    console.log(`Showing photo ${currentPhoto + 1}`);
+                } else {
+                    // If this photo failed to load, try the next one
+                    showNextPhoto();
+                }
+            }, 500);
+        }
+        
+        // Start photo slideshow
+        function startPhotoSlideshow() {
+            // Preload all images first
+            preloadImages();
+            
+            // Show first photo after 1 second
+            setTimeout(() => {
+                currentPhoto = 0;
+                const firstElement = document.getElementById(photos[currentPhoto]);
+                if (firstElement && firstElement.style.display !== 'none') {
+                    firstElement.classList.add('active');
+                    console.log(`Showing photo ${currentPhoto + 1}`);
+                }
+            }, 1000);
+            
+            // Change photos every 3 seconds (including 0.5s fade gap)
+            setInterval(() => {
+                showNextPhoto();
+            }, 3000);
+        }
+        
+        // Initialize slideshow when page loads
+        window.addEventListener('load', startPhotoSlideshow);
+
+        function showCoupon() {
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('couponPage').style.display = 'flex';
+        }
+
+        function showMain() {
+            document.getElementById('couponPage').style.display = 'none';
+            document.getElementById('mainPage').style.display = 'flex';
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText('LOVE4EVER').then(function() {
+                alert('Coupon code copied! LOVE4EVER 💕');
+            });
+        }
+
+        // Create colorful floating hearts
+        let heartColorIndex = 0;
+        const heartColors = ['white', 'pink', 'blue', 'red', 'purple', 'gold', 'cyan', 'orange'];
+        
+        function createColorfulFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.classList.add(heartColors[heartColorIndex]);
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = '3s';
+            heart.style.fontSize = Math.random() * 8 + 22 + 'px';
+            
+            document.getElementById('floatingHearts').appendChild(heart);
+            
+            // Cycle through colors
+            heartColorIndex = (heartColorIndex + 1) % heartColors.length;
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+
+        // Generate colorful floating hearts every 2 seconds
+        setInterval(createColorfulFloatingHeart, 2000);
+
+        // Add some initial hearts with different delays
+        for(let i = 0; i < 3; i++) {
+            setTimeout(createColorfulFloatingHeart, i * 700);
+        }
+    </script>
+</body>
 </html>
+
